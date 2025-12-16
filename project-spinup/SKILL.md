@@ -611,7 +611,24 @@ Key sections:
 - Deployment
 - Resources & References
 - Troubleshooting
+- Workflow (see workflow-pointer below)
 - Next Steps (Guided Setup) or Immediate Actions (Quick Start)
+
+<workflow-pointer>
+Include this section in every generated CLAUDE.md to enable manifest-based orchestration:
+
+```markdown
+## Workflow
+
+This project uses the skill-foundry workflow system.
+
+**Manifest:** `.claude/workflow-manifest.yaml`
+**Status:** Invoke `workflow-status` skill to check progress
+**Handoffs:** `.docs/` directory
+```
+
+This lightweight pointer (~5 tokens) enables just-in-time manifest loading by the workflow-status orchestrator. The manifest is only read when workflow-status is invoked, not on every turn.
+</workflow-pointer>
 </claude-md-template>
 
 ---

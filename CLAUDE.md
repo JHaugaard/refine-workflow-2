@@ -2,9 +2,28 @@
 
 This project is part of the Skill Foundry workspace.
 
+## CRITICAL: Skill Development Boundaries
+
+**ALL SKILL WORK MUST REMAIN LOCAL TO THIS PROJECT FOLDER.**
+
+The skills in this project (`/Volumes/dev/skill-foundry/refine-workflow-2/`) are development copies being refined. The production versions at `/Users/john/.claude/skills/` must NOT be modified during this work.
+
+**Rules:**
+1. NEVER write to, edit, or delete any file under `/Users/john/.claude/skills/`
+2. NEVER copy files from this project to `/Users/john/.claude/skills/`
+3. All skill edits happen ONLY within this project directory
+4. Reading from `/Users/john/.claude/skills/` for reference is permitted
+5. Deployment to the user-level skills directory requires EXPLICIT user instruction
+
+**If asked to "update the skill" or "save changes":** This means updating the local copy in THIS project folder, not the user-level skills.
+
+**Violation of these rules could overwrite production skills the user depends on.**
+
+---
+
 ## Project Structure
 - `.claude/` - Claude Code session files and configuration
-- `skills/` - Claude Code skill definitions (if applicable)
+- `*/` - Skill directories (local development copies)
 
 ## Development Guidelines
 - Follow the established patterns in the parent skill-foundry project

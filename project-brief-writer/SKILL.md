@@ -1,12 +1,12 @@
 ---
 name: project-brief-writer
-description: "Transform rough project ideas into problem-focused briefs that preserve learning opportunities and feed into the Skills workflow (tech-stack-advisor -> deployment-advisor -> project-spinup)."
+description: "Transform rough project ideas into problem-focused briefs that preserve learning opportunities. Outputs structured .docs/brief.json for downstream skills."
 ---
 
 # project-brief-writer
 
 <purpose>
-Transform rough project ideas into problem-focused briefs that preserve learning opportunities and feed into the Skills workflow (tech-stack-advisor -> deployment-advisor -> project-spinup).
+Transform rough project ideas into problem-focused briefs that preserve learning opportunities. Produces technology-neutral requirements that can be consumed by downstream advisory skills.
 </purpose>
 
 <output>
@@ -343,9 +343,7 @@ I see you've mentioned a specific deployment platform/infrastructure [e.g., 'Ver
     "disclaimer": "These are user-stated starting points, NOT requirements. Downstream skills should provide unbiased recommendations.",
     "technology": "[User's tech preferences if stated, otherwise null]",
     "platform": "[User's platform preferences if stated, otherwise null]"
-  },
-
-  "handoff_to": ["tech-stack-advisor", "deployment-advisor", "project-spinup"]
+  }
 }
 </json-schema>
 
@@ -375,27 +373,21 @@ Does this capture your project accurately?
 </phase>
 
 <phase id="7" name="confirm-completion">
-<action>Confirm save and show workflow status with termination point guidance.</action>
+<action>Confirm save and summarize outputs.</action>
 
 <confirmation-template>
-Saved project brief to `.docs/brief.json`
-Created workflow mode in `.docs/PROJECT-MODE.md`
+**Project Brief Complete**
 
----
+Saved:
+- `.docs/brief.json` — structured project requirements
+- `.docs/PROJECT-MODE.md` — workflow mode declaration
 
-## Workflow Status
-
-**Phase 0: Project Brief** COMPLETE
-- PROJECT-MODE.md created (Mode: [mode])
-- brief.json created with structured handoff
+Summary:
+- Mode: [LEARNING/DELIVERY/BALANCED]
 - Deployment intent: [localhost/public/tbd]
 - User preferences: [captured/none stated]
 
-**Next:** Invoke **tech-stack-advisor** to explore technology options.
-
----
-
-Would you like to invoke tech-stack-advisor now, or review/refine the brief first?
+The brief is ready for downstream skills to consume.
 </confirmation-template>
 </phase>
 
@@ -530,28 +522,21 @@ Excellent! This is a well-scoped problem. Let me ask a few questions:
 
 <integration-notes>
 
-<workflow-position>
-Phase 0 in the Skills workflow chain (first skill).
-Produces: .docs/PROJECT-MODE.md, .docs/brief.json for tech-stack-advisor
-</workflow-position>
+<outputs>
+Produces:
+- `.docs/PROJECT-MODE.md` — workflow mode declaration (LEARNING/DELIVERY/BALANCED)
+- `.docs/brief.json` — structured handoff for downstream skills
 
-<termination-guidance>
+These files are designed to be consumed by advisory skills (tech-stack-advisor, deployment-advisor, etc.) without requiring this skill to specify which comes next.
+</outputs>
+
+<deployment-intent>
 Deployment intent is captured as a simple category only:
-- Localhost: Project runs locally
-- Public: Project needs online access
-- TBD: Decision deferred
+- localhost: Project runs locally
+- public: Project needs online access
+- tbd: Decision deferred
 
-Workflow path decisions are made by downstream skills, not this brief.
-</termination-guidance>
-
-<status-utility>
-Users can invoke the **workflow-status** skill at any time to:
-- See current workflow progress
-- Check which phases are complete
-- Get guidance on next steps
-- Review all handoff documents
-
-Mention this option when users seem uncertain about their progress.
-</status-utility>
+This enables downstream routing decisions without this skill prescribing them.
+</deployment-intent>
 
 </integration-notes>
