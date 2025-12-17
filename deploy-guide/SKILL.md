@@ -1,6 +1,13 @@
 ---
 name: deploy-guide
 description: "Guide user through actual deployment steps for their application. This skill should be used when a project is ready to deploy to production. Walks through pre-deployment checks, deployment execution, and post-deployment verification. Supports VPS/Docker, Cloudflare Pages, fly.io, and Hostinger Shared Hosting."
+version: 1.1.0
+author: john
+tags:
+  - workflow
+  - release
+  - deployment
+  - executor
 allowed-tools:
   - Read
   - Grep
@@ -774,15 +781,7 @@ Issues detected. Would you like help troubleshooting? [yes/no]
 
   "deployment_history": [
     {"date": "[YYYY-MM-DD]", "commit": "[hash]", "status": "SUCCESS", "notes": "[notes]"}
-  ],
-
-  "workflow_status": {
-    "completed_phases": ["project-brief-writer", "tech-stack-advisor", "deployment-advisor", "project-spinup", "deploy-guide"],
-    "is_termination_point": true,
-    "next_phases": ["ci-cd-implement"]
-  },
-
-  "handoff_to": ["ci-cd-implement"]
+  ]
 }
 </json-schema>
 
@@ -1067,49 +1066,14 @@ flyctl logs | grep -i "storage\|s3\|upload\|bucket"
 
 ---
 
-<workflow-status>
-Phase 5 of 6: Deployment
+<outputs>
+**.docs/deployment-log.json** — Structured deployment record with:
+- Deployment target and URLs
+- Pre/post deployment verification results
+- Storage configuration
+- Runbook commands (deploy, rollback, logs)
+- Environment variables reference
+- Deployment history
 
-Status:
-  Phase 0: Project Brief (project-brief-writer)
-  Phase 1: Tech Stack (tech-stack-advisor)
-  Phase 2: Deployment Strategy (deployment-advisor)
-  Phase 3: Project Foundation (project-spinup) <- TERMINATION POINT (localhost)
-  Phase 4: Test Strategy (test-orchestrator) - optional, can run anytime
-  Phase 5: Deployment (you are here) <- TERMINATION POINT (manual deploy)
-  Phase 6: CI/CD (ci-cd-implement) <- TERMINATION POINT (full automation)
-</workflow-status>
-
----
-
-<integration-notes>
-
-<workflow-position>
-Phase 5 of 6 in the Skills workflow chain.
-Expected input: Deployable project, .docs/deployment-strategy.json (gathered conversationally if missing)
-Produces: Deployed application, .docs/deployment-log.json
-
-This is a TERMINATION POINT for projects not needing CI/CD automation.
-</workflow-position>
-
-<flexible-entry>
-This skill can be invoked standalone on any deployable project. It gathers deployment target information conversationally if not available in handoff documents.
-</flexible-entry>
-
-<when-to-invoke>
-- When project development is complete (or MVP ready)
-- When user is ready to deploy to production
-- For subsequent deployments (use deployment-log.md as runbook)
-</when-to-invoke>
-
-<status-utility>
-Users can invoke the **workflow-status** skill at any time to:
-- See current workflow progress
-- Check which phases are complete
-- Get guidance on next steps
-- Review all handoff documents
-
-Mention this option when users seem uncertain about their progress.
-</status-utility>
-
-</integration-notes>
+**Flexible Entry:** This skill gathers deployment target information conversationally if not available in handoff documents. Can be invoked standalone on any deployable project.
+</outputs>

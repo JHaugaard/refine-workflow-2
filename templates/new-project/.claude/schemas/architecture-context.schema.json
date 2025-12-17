@@ -1,0 +1,194 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "architecture-context.schema.json",
+  "title": "Architecture Context",
+  "description": "Architectural decisions produced by solution-architect skill",
+  "type": "object",
+  "required": ["document_type", "project", "mode", "created_by", "project_context", "platform", "scale"],
+  "properties": {
+    "document_type": {
+      "type": "string",
+      "const": "architecture-context"
+    },
+    "project": {
+      "type": "string",
+      "minLength": 1
+    },
+    "mode": {
+      "type": "string",
+      "enum": ["LEARNING", "DELIVERY", "BALANCED"]
+    },
+    "created_by": {
+      "type": "string",
+      "const": "solution-architect"
+    },
+    "project_context": {
+      "type": "object",
+      "required": ["type", "rationale"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["greenfield", "brownfield", "migration"]
+        },
+        "rationale": { "type": "string" },
+        "existing_system": {
+          "type": ["object", "null"],
+          "properties": {
+            "description": { "type": "string" },
+            "tech_stack": { "type": "string" },
+            "integration_approach": {
+              "type": "string",
+              "enum": ["extend", "replace", "wrap", "integrate"]
+            }
+          }
+        }
+      }
+    },
+    "platform": {
+      "type": "object",
+      "required": ["primary", "rationale"],
+      "properties": {
+        "primary": {
+          "type": "string",
+          "enum": ["web", "pwa", "ios", "macos", "android", "cross-platform-mobile", "desktop", "cli", "api"]
+        },
+        "secondary": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "rationale": { "type": "string" },
+        "native_capabilities": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "offline_requirement": {
+          "type": "string",
+          "enum": ["none", "occasional", "primary"]
+        }
+      }
+    },
+    "integrations": {
+      "type": "object",
+      "properties": {
+        "profile": {
+          "type": "string",
+          "enum": ["standalone", "lightly-integrated", "heavily-integrated"]
+        },
+        "required": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["system", "type"],
+            "properties": {
+              "system": { "type": "string" },
+              "type": {
+                "type": "string",
+                "enum": ["api", "database", "auth", "file-system", "hardware", "internal"]
+              },
+              "protocol": {
+                "type": "string",
+                "enum": ["REST", "GraphQL", "SDK", "direct", "unknown"]
+              },
+              "constraint_level": {
+                "type": "string",
+                "enum": ["hard", "soft"]
+              }
+            }
+          }
+        },
+        "optional": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "scale": {
+      "type": "object",
+      "required": ["profile"],
+      "properties": {
+        "profile": {
+          "type": "string",
+          "enum": ["personal", "team", "organization", "public"]
+        },
+        "concurrent_users": {
+          "type": "string",
+          "enum": ["1", "2-10", "10-100", "100-1000", "1000+"]
+        },
+        "data_volume": {
+          "type": "string",
+          "enum": ["minimal", "moderate", "large", "massive"]
+        },
+        "availability": {
+          "type": "string",
+          "enum": ["best-effort", "business-hours", "high", "critical"]
+        },
+        "rationale": { "type": "string" }
+      }
+    },
+    "team": {
+      "type": "object",
+      "properties": {
+        "size": {
+          "type": "string",
+          "enum": ["solo", "solo-with-ai", "small-team", "existing-team"]
+        },
+        "avoid": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "constraints": {
+      "type": "object",
+      "properties": {
+        "hard": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": ["compliance", "vendor", "data-residency", "accessibility"]
+              },
+              "description": { "type": "string" },
+              "impact": { "type": "string" }
+            }
+          }
+        },
+        "soft": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "architecture_implications": {
+      "type": "object",
+      "properties": {
+        "for_tech_stack": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "for_deployment": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "decisions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "decision", "rationale"],
+        "properties": {
+          "id": { "type": "string" },
+          "decision": { "type": "string" },
+          "rationale": { "type": "string" }
+        }
+      }
+    },
+    "open_questions": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}

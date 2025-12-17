@@ -1,6 +1,17 @@
 ---
 name: workflow-status
 description: "Display project workflow progress by reading handoff documents in .docs/ directory. This skill should be used when users want to check their workflow status, see what phase they're in, or when other workflow skills need to verify prerequisites. Provides reusable prerequisite-checking templates for integration with other workflow skills."
+version: 2.0.0
+author: john
+tags:
+  - workflow
+  - orchestrator
+  - status
+  - utility
+allowed-tools:
+  - Read
+  - Grep
+  - Glob
 ---
 
 # workflow-status

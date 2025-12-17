@@ -1,6 +1,13 @@
 ---
 name: tech-stack-advisor
 description: "Analyze project requirements and recommend appropriate technology stacks with detailed rationale. Provides primary recommendation, alternatives, and ruled-out options with explanations."
+version: 1.5.0
+author: john
+tags:
+  - workflow
+  - architecture
+  - tech-stack
+  - advisory
 allowed-tools:
   - Read
   - Grep
@@ -371,7 +378,6 @@ Do NOT include:
 
   "user_stated_constraints": "[If user mentioned deployment preferences, otherwise null]",
 
-  "handoff_to": ["deployment-advisor", "project-spinup"]
 }
 </json-schema>
 
@@ -478,48 +484,13 @@ These concerns must remain separated to ensure unbiased tech stack recommendatio
 
 ---
 
-<workflow-status>
-Phase 2 of 8: Technology Stack Selection
+<outputs>
+**.docs/tech-stack-decision.json** — Structured technology stack recommendation with:
+- Primary recommendation with rationale
+- Stack breakdown (frontend, backend, database, auth, styling, storage, testing)
+- Platform decision (if non-web)
+- Alternatives considered with trade-offs
+- Ruled-out options with explanations
 
-Status:
-  Phase 0: Project Brief (project-brief-writer)
-  Phase 1: Architecture Context (solution-architect) [recommended]
-  Phase 2: Tech Stack Advisor (you are here)
-  Phase 3: Deployment Strategy (deployment-advisor)
-  Phase 4: Project Foundation (project-spinup) <- TERMINATION POINT
-  Phase 5: Test Strategy (test-orchestrator) - optional
-  Phase 6: Deployment (deploy-guide) <- TERMINATION POINT
-  Phase 7: CI/CD (ci-cd-implement) <- TERMINATION POINT
-</workflow-status>
-
----
-
-<integration-notes>
-
-<workflow-position>
-Phase 2 of 8 in the Skills workflow chain.
-Expected input:
-- .docs/PROJECT-MODE.md (mode declaration)
-- .docs/brief.json (project requirements)
-- .docs/architecture-context.json (architectural constraints) [optional but recommended]
-
-If architecture-context.json exists, architectural decisions (platform, integrations, scale, constraints) are LOCKED and constrain recommendations.
-
-Produces: .docs/tech-stack-decision.json for deployment-advisor and project-spinup
-</workflow-position>
-
-<flexible-entry>
-This skill can be invoked standalone without prior phases. Missing context is gathered through conversation rather than blocking.
-</flexible-entry>
-
-<status-utility>
-Users can invoke the **workflow-status** skill at any time to:
-- See current workflow progress
-- Check which phases are complete
-- Get guidance on next steps
-- Review all handoff documents
-
-Mention this option when users seem uncertain about their progress.
-</status-utility>
-
-</integration-notes>
+**Flexible Entry:** This skill gathers missing context conversationally. If architecture-context.json exists, those decisions constrain recommendations.
+</outputs>

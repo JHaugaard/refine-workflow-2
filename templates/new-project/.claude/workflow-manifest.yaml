@@ -1,0 +1,205 @@
+# Workflow Manifest v3 - Loaded on-demand by workflow-status orchestrator
+# Documentation: See workflow-status/references/HANDOFF-DOCUMENTATION.md
+# Schemas: See .claude/schemas/ for JSON schema validation
+
+schema_version: "3.0"
+workflow: project-development
+version: 1.0.0
+handoff_directory: ".docs/"
+schema_directory: ".claude/schemas/"
+
+phases:
+  discovery:
+    name: "Discovery"
+    description: "Understanding the problem space"
+  architecture:
+    name: "Architecture"
+    description: "Technical decisions and design"
+  planning:
+    name: "Planning"
+    description: "Deployment and infrastructure strategy"
+  implementation:
+    name: "Implementation"
+    description: "Project generation and setup"
+  quality:
+    name: "Quality"
+    description: "Testing infrastructure"
+  release:
+    name: "Release"
+    description: "Deployment and automation"
+
+# Workflow skills - 8 domain skills that produce/consume handoffs
+# Note: workflow-status is the orchestrator that reads this manifest (not listed here)
+skills:
+  project-brief-writer:
+    phase: discovery
+    description: "Transform rough ideas into structured project briefs"
+    requires: []
+    outputs:
+      - ".docs/brief.json"
+      - ".docs/PROJECT-MODE.md"
+    schema: "brief.schema.json"
+    next: tech-stack-advisor
+    entry_point: true
+    standalone: true
+
+  solution-architect:
+    phase: architecture
+    description: "Resolve architectural ambiguity for complex projects"
+    optional: true
+    standalone: true
+    requires:
+      - ".docs/brief.json"
+    outputs:
+      - ".docs/architecture-context.json"
+    schema: "architecture-context.schema.json"
+    next: tech-stack-advisor
+
+  tech-stack-advisor:
+    phase: architecture
+    description: "Recommend technology stack with rationale"
+    requires:
+      - ".docs/brief.json"
+    optional_inputs:
+      - ".docs/architecture-context.json"
+    outputs:
+      - ".docs/tech-stack-decision.json"
+    schema: "tech-stack-decision.schema.json"
+    next: deployment-advisor
+    standalone: true
+
+  deployment-advisor:
+    phase: planning
+    description: "Recommend hosting and deployment strategy"
+    requires:
+      - ".docs/tech-stack-decision.json"
+    optional_inputs:
+      - ".docs/architecture-context.json"
+    outputs:
+      - ".docs/deployment-strategy.json"
+    schema: "deployment-strategy.schema.json"
+    next: project-spinup
+    standalone: true
+
+  project-spinup:
+    phase: implementation
+    description: "Generate project foundation with CLAUDE.md and structure"
+    requires:
+      - ".docs/tech-stack-decision.json"
+      - ".docs/deployment-strategy.json"
+    optional_inputs:
+      - ".docs/architecture-context.json"
+    outputs:
+      - ".docs/project-foundation.json"
+      - "CLAUDE.md"
+    schema: "project-foundation.schema.json"
+    next: deploy-guide
+    standalone: true
+
+  test-orchestrator:
+    phase: quality
+    description: "Set up testing infrastructure and strategy"
+    optional: true
+    standalone: true
+    requires:
+      - ".docs/tech-stack-decision.json"
+    outputs:
+      - ".docs/test-strategy.md"
+    next: null
+
+  deploy-guide:
+    phase: release
+    description: "Guide through actual deployment steps"
+    requires:
+      - ".docs/deployment-strategy.json"
+    outputs:
+      - ".docs/deployment-log.json"
+    schema: "deployment-log.schema.json"
+    next: null
+    termination: true
+    standalone: true
+
+  ci-cd-implement:
+    phase: release
+    description: "Implement CI/CD pipelines"
+    optional: true
+    standalone: true
+    requires:
+      - ".docs/deployment-strategy.json"
+    optional_inputs:
+      - ".docs/deployment-log.json"
+    outputs:
+      - ".github/workflows/ci.yml"
+      - ".github/workflows/deploy.yml"
+      - "CICD-SECRETS.md"
+    next: null
+    termination: true
+
+# Decision gates - OVERRIDE skill's `next` when present
+# Gates are evaluated in order; first matching gate wins
+decision_gates:
+  - after: project-brief-writer
+    ask: "Does this project need architecture review?"
+    routes:
+      yes: solution-architect
+      no: tech-stack-advisor
+
+  # Gate for non-localhost projects after spinup
+  - after: project-spinup
+    condition:
+      source: ".docs/deployment-strategy.json"
+      field: "hosting.type"
+      op: "not_equals"
+      value: "localhost"
+    ask: "Project foundation ready. Deploy now or develop first?"
+    routes:
+      deploy: deploy-guide
+      develop: null
+
+  # Auto-terminate for localhost projects
+  - after: project-spinup
+    condition:
+      source: ".docs/deployment-strategy.json"
+      field: "hosting.type"
+      op: "equals"
+      value: "localhost"
+    auto_terminate: true
+    label: "Localhost/Native - Development Ready"
+
+  - after: deploy-guide
+    ask: "Set up CI/CD automation?"
+    routes:
+      yes: ci-cd-implement
+      no: null
+
+# Named workflow variants for common paths
+variants:
+  minimal:
+    description: "Fast path for simple localhost projects"
+    skills: [project-brief-writer, tech-stack-advisor, deployment-advisor, project-spinup]
+  standard:
+    description: "Standard path through deployment"
+    skills: [project-brief-writer, tech-stack-advisor, deployment-advisor, project-spinup, deploy-guide]
+  full:
+    description: "Complete path with all optional phases"
+    skills: all
+
+# Explicit termination points
+termination_points:
+  - after: project-spinup
+    label: "Localhost/Native - Development Ready"
+    condition:
+      source: ".docs/deployment-strategy.json"
+      field: "hosting.type"
+      op: "equals"
+      value: "localhost"
+  - after: deploy-guide
+    label: "Manual Deployment Complete"
+    default: true
+  - after: ci-cd-implement
+    label: "Full CI/CD Automation"
+
+# Meta section - orchestrator and utility skills
+meta:
+  orchestrator: workflow-status
+  note: "workflow-status loads this manifest just-in-time and coordinates skill transitions"

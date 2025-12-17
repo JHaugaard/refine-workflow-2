@@ -1,6 +1,13 @@
 ---
 name: ci-cd-implement
 description: "Analyze a project and implement CI/CD pipelines tailored to its tech stack and deployment target. This skill should be used when a project is ready for automated testing and/or deployment. Generates GitHub Actions workflows, deployment scripts, and secrets documentation. Works as a standalone utility on any project."
+version: 1.1.0
+author: john
+tags:
+  - workflow
+  - release
+  - ci-cd
+  - executor
 ---
 
 # ci-cd-implement
@@ -952,84 +959,20 @@ Happy deploying!
 
 ---
 
-<workflow-status>
-Phase 6 of 6: CI/CD Implementation (Final Phase)
+<outputs>
+**.github/workflows/ci.yml** — Continuous integration workflow (if CI requested):
+- Automated testing, linting, type checking on push/PR
+- Language-specific setup and dependency caching
 
-Status:
-  Phase 0: Project Brief (project-brief-writer)
-  Phase 1: Tech Stack (tech-stack-advisor)
-  Phase 2: Deployment Strategy (deployment-advisor)
-  Phase 3: Project Foundation (project-spinup) <- TERMINATION POINT (localhost)
-  Phase 4: Test Strategy (test-orchestrator) - optional, can run anytime
-  Phase 5: Deployment (deploy-guide) <- TERMINATION POINT (manual deploy)
-  Phase 6: CI/CD (you are here) <- TERMINATION POINT (full automation)
-</workflow-status>
+**.github/workflows/deploy.yml** — Continuous deployment workflow (if CD requested):
+- Automated deployment to configured target
+- Target-specific deployment commands
 
----
+**scripts/deploy.sh, scripts/rollback.sh** — Manual deployment scripts (for VPS targets)
 
-<user-context>
+**CICD-SECRETS.md** — Documentation of required GitHub secrets with setup instructions
 
-<infrastructure>
-- Hostinger VPS8: 8 cores, 32GB RAM, 400GB storage
-  - Docker/Docker Compose
-  - SSH as user "john"
-  - Caddy for reverse proxy
-- Cloudflare DNS
-- Backblaze B2 for object storage (available for any deployment target)
-- GitHub for version control
-</infrastructure>
+**Flexible Entry:** This skill analyzes project structure to generate appropriate pipelines. Reads deployment-strategy.json for target configuration but gathers missing info conversationally.
 
-<storage-options-supported>
-1. **Local VPS** - Files on VPS filesystem (no CI/CD secrets needed)
-2. **Backblaze B2** - S3-compatible storage (secrets: B2_APPLICATION_KEY_ID, B2_APPLICATION_KEY, B2_BUCKET_NAME, B2_ENDPOINT)
-3. **Tigris** - Fly.io native storage (auto-injected credentials, no GitHub secrets needed)
-
-Storage choice comes from .docs/deployment-strategy.md or user confirmation.
-</storage-options-supported>
-
-<deployment-targets-supported>
-1. hostinger-shared - PHP + MySQL via cPanel (rsync/FTP)
-2. cloudflare-pages - Static/JAMstack (Wrangler)
-3. fly-io - Containerized apps (flyctl)
-4. vps-docker - Docker on Hostinger VPS (SSH + docker compose)
-
-NOT supported: localhost (no CI/CD needed for localhost)
-</deployment-targets-supported>
-
-</user-context>
-
----
-
-<integration-notes>
-
-<workflow-position>
-Phase 6 of 6 in the Skills workflow chain (final phase).
-Expected input: Project structure, .docs/deployment-strategy.json (from deployment-advisor)
-Produces: .github/workflows/, scripts/, CICD-SECRETS.md
-
-Reads from JSON handoffs:
-- deployment-strategy.json: Deployment target, storage strategy
-- deployment-log.json: Verification that manual deployment succeeded (optional)
-
-This is a TERMINATION POINT - workflow complete after this skill.
-</workflow-position>
-
-<flexible-entry>
-This skill can be invoked standalone on any project with a deployment target. It analyzes the project structure to generate appropriate pipelines.
-</flexible-entry>
-
-<localhost-note>
-If the project's deployment target is localhost (from .docs/deployment-strategy.md or user confirmation), inform the user that CI/CD is not applicable for localhost projects and the workflow is already complete.
-</localhost-note>
-
-<status-utility>
-Users can invoke the **workflow-status** skill at any time to:
-- See current workflow progress
-- Check which phases are complete
-- Get guidance on next steps
-- Review all handoff documents
-
-Mention this option when users seem uncertain about their progress.
-</status-utility>
-
-</integration-notes>
+**Note:** CI/CD is not applicable for localhost projects.
+</outputs>

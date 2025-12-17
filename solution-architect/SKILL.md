@@ -11,12 +11,7 @@ tags:
 ---
 
 <overview>
-solution-architect bridges the gap between project-brief-writer and tech-stack-advisor. It takes a problem-focused brief and resolves the architectural questions that fundamentally change tech stack recommendations—questions the brief intentionally leaves open to preserve technology neutrality.
-
-**Workflow Position:**
-```
-project-brief-writer → solution-architect → tech-stack-advisor → deployment-advisor
-```
+solution-architect resolves architectural ambiguity before technology decisions. It takes a problem-focused brief and answers the fundamental questions that change tech stack recommendations—questions the brief intentionally leaves open to preserve technology neutrality.
 
 **Core Insight:**
 A brief that says "build me a task tracker" could mean:
@@ -386,12 +381,11 @@ Create `.docs/architecture-context.json`:
     ]
   },
 
-  "decisions_locked": [
+  "decisions": [
     {
       "id": "SA-001",
       "decision": "[Architectural decision made]",
-      "rationale": "[Why]",
-      "status": "LOCKED"
+      "rationale": "[Why]"
     }
   ],
 
@@ -399,7 +393,6 @@ Create `.docs/architecture-context.json`:
     "[Questions that couldn't be resolved, for downstream skills to address]"
   ],
 
-  "handoff_to": ["tech-stack-advisor", "deployment-advisor", "project-spinup"]
 }
 ```
 
@@ -421,16 +414,10 @@ I've documented your architecture context in `.docs/architecture-context.json`.
 - **Scale:** [profile] ([concurrent users])
 - **Key Constraints:** [list]
 
-**What's Next:**
-Your architecture context will guide tech-stack-advisor to recommend technologies that fit your:
-- [Platform] requirements
-- [Integration] needs
-- [Scale] expectations
-- [Constraint] boundaries
+**Outputs:**
+- `.docs/architecture-context.json` — Structured architectural decisions
 
-**To proceed:** Invoke `tech-stack-advisor` when ready.
-
-The architecture decisions above are now LOCKED. Tech-stack-advisor will work within these constraints rather than re-asking these questions.
+These architectural decisions provide context for technology selection, constraining the solution space appropriately without prescribing specific technologies.
 ```
 
 </handoff-message>

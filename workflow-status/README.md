@@ -2,11 +2,11 @@
 
 ## Overview
 
-Display project workflow progress by reading handoff documents in the .docs/ directory. Presents a clear picture of completed phases, pending phases, and actionable next steps. Also provides reusable prerequisite-checking templates for other workflow skills to integrate.
+The workflow orchestrator that reads the manifest and provides intelligent navigation through the skills workflow. Displays progress, recommends next steps, and evaluates decision gates.
 
-**Use when:** Checking workflow status, returning to a project after time away, or verifying prerequisites before running a workflow skill.
+**Use when:** Checking workflow status, returning to a project after time away, or getting guidance on what to do next.
 
-**Output:** Formatted status display with phase progress, next step recommendation, and list of found handoff documents.
+**Output:** Formatted status display with phase progress, next step recommendation, and decision gate prompts.
 
 ---
 
@@ -14,44 +14,87 @@ Display project workflow progress by reading handoff documents in the .docs/ dir
 
 When invoked, this skill will:
 
-1. **Detect context** - Read project directory name and scan .docs/ for handoff documents
-2. **Analyze progress** - Determine completion status of each workflow phase
-3. **Determine next step** - Identify actionable recommendation based on current progress
-4. **Display status** - Present formatted output with all findings
+1. **Load manifest** - Read `.claude/workflow-manifest.yaml` (just-in-time)
+2. **Scan handoffs** - Check `.docs/` directory for completed handoff documents
+3. **Evaluate state** - Determine which skills have completed based on outputs
+4. **Check gates** - Evaluate any decision gates that apply to current position
+5. **Recommend next** - Provide actionable next step with reasoning
+6. **Display status** - Present formatted output with all findings
 
 ---
 
-## Workflow Integration
+## Manifest-Based Orchestration
 
-This skill serves two roles:
+This skill is the central orchestrator for the workflow system. It:
 
-1. **Standalone utility** - Users invoke directly to check status
-2. **Prerequisite provider** - Other skills use reusable templates for their Step 0
+- Loads the workflow manifest just-in-time (zero token overhead when not invoked)
+- Evaluates structured condition predicates to determine routing
+- Presents decision gates when user input is required
+- Validates manifest structure on load
 
-### Reusable Templates
+Other skills are "pure capabilities" — they focus on their domain and produce handoff documents. This skill handles all workflow coordination.
 
-The skill includes prerequisite-check templates that other workflow skills (tech-stack-advisor, deployment-advisor, project-spinup) can reference to auto-check status and report conversationally before proceeding.
+---
+
+## Output Modes
+
+### Default Mode (minimal context)
+
+```
+Workflow: project-development v1.0.0
+
+Current Phase: Architecture (2 of 6)
+
+Completed:
+  [x] project-brief-writer -> .docs/brief.json
+
+Next Recommended: tech-stack-advisor
+  Reason: Brief complete, ready for stack recommendation
+  Requires: .docs/brief.json (exists)
+
+Decision Pending: None
+```
+
+### --full Mode (complete view)
+
+Shows all phases, all skills, all decision points, full dependency graph.
+
+### --trace Mode (debugging)
+
+Machine-readable JSON showing files checked, gates evaluated, transitions applied.
 
 ---
 
 ## Reference Files
 
-- **HANDOFF-DOCUMENTATION.md** - Complete documentation of the handoff system, revision guidance, and troubleshooting
+- [HANDOFF-DOCUMENTATION.md](references/HANDOFF-DOCUMENTATION.md) - Complete documentation of the handoff system
+- [workflow-manifest.yaml](../.claude/workflow-manifest.yaml) - The workflow definition
 
 ---
 
 ## Version History
 
+### v2.0 (2025-12-16)
+
+Manifest-Based Orchestrator
+
+- Transformed from status display to full orchestrator
+- Added just-in-time manifest loading
+- Added structured condition evaluation
+- Added decision gate handling
+- Added output modes (default, --full, --trace)
+- Added manifest validation
+
 ### v1.0 (2025-11-19)
-**Initial Release**
+
+Initial Release
 
 - Workflow status detection and display
 - Phase progress analysis from handoff documents
 - Next step recommendations
 - Reusable prerequisite-check templates for other skills
-- HANDOFF-DOCUMENTATION.md reference
 
 ---
 
-**Version:** 1.0
-**Last Updated:** 2025-11-19
+**Version:** 2.0
+**Last Updated:** 2025-12-16

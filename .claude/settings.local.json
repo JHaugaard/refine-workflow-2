@@ -11,7 +11,9 @@
       "Bash(git -C /Volumes/dev/skill-foundry/refine-workflow-2 remote -v)",
       "Bash(git -C /Volumes/dev/skill-foundry remote -v)",
       "Bash(git remote:*)",
-      "Bash(git remote add:*)"
+      "Bash(git remote add:*)",
+      "Bash(done)",
+      "Bash(ls:*)"
     ]
   }
 }

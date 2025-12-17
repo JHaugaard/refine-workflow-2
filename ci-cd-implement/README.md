@@ -2,11 +2,11 @@
 
 ## Overview
 
-Analyzes an existing project and generates production-ready CI/CD pipelines tailored to its tech stack and deployment target. Works as a standalone utility on any project—does not require prior workflow skills to have run.
+Analyzes an existing project and generates production-ready CI/CD pipelines tailored to its tech stack and deployment target. Works as a standalone utility on any project.
 
-**Use when:** A project is mature enough for automated testing and/or deployment
+**Use when:** A project is mature enough for automated testing and/or deployment.
 
-**Output:** GitHub Actions workflows, deployment scripts, and secrets documentation
+**Output:** GitHub Actions workflows, deployment scripts, and secrets documentation.
 
 ---
 
@@ -21,6 +21,14 @@ When invoked, this skill will:
 5. **Generate CD** - Create deployment workflow and scripts for the target platform
 6. **Document secrets** - Create CICD-SECRETS.md with all required secrets and setup instructions
 7. **Summarize** - Present what was created with clear next steps
+
+---
+
+## Standalone Capability
+
+This skill can be invoked independently on any project with a deployment target. If `.docs/deployment-strategy.json` is not available, the skill analyzes the project structure and asks about deployment target conversationally.
+
+If using the workflow system, invoke `workflow-status` to see recommended next steps.
 
 ---
 
@@ -49,10 +57,29 @@ Depending on preferences, the skill generates:
 
 ---
 
+## Output Files
+
+| File | Purpose |
+|------|---------|
+| `.github/workflows/ci.yml` | Continuous integration pipeline |
+| `.github/workflows/deploy.yml` | Continuous deployment pipeline |
+| `CICD-SECRETS.md` | Documentation of required secrets |
+
+---
+
 ## Version History
 
+### v1.1 (2025-12-16)
+
+Manifest-Based Refactor
+
+- Removed embedded workflow orchestration
+- Skills now focus purely on their domain
+- Workflow routing handled by manifest
+
 ### v1.0 (November 2025)
-**Initial Release**
+
+Initial Release
 
 - Project analysis for tech stack and deployment target detection
 - CI pipeline generation with language-specific setup
@@ -63,5 +90,5 @@ Depending on preferences, the skill generates:
 
 ---
 
-**Version:** 1.0
-**Last Updated:** November 2025
+**Version:** 1.1
+**Last Updated:** 2025-12-16

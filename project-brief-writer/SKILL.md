@@ -1,6 +1,13 @@
 ---
 name: project-brief-writer
 description: "Transform rough project ideas into problem-focused briefs that preserve learning opportunities. Outputs structured .docs/brief.json for downstream skills."
+version: 1.2.0
+author: john
+tags:
+  - workflow
+  - discovery
+  - brief
+  - advisory
 ---
 
 # project-brief-writer

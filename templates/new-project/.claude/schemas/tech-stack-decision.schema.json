@@ -1,0 +1,153 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "tech-stack-decision.schema.json",
+  "title": "Tech Stack Decision",
+  "description": "Technology stack recommendation produced by tech-stack-advisor skill",
+  "type": "object",
+  "required": ["document_type", "project", "mode", "created_by", "recommendation"],
+  "properties": {
+    "document_type": {
+      "type": "string",
+      "const": "tech-stack-decision"
+    },
+    "project": {
+      "type": "string",
+      "minLength": 1
+    },
+    "mode": {
+      "type": "string",
+      "enum": ["LEARNING", "DELIVERY", "BALANCED"]
+    },
+    "created_by": {
+      "type": "string",
+      "const": "tech-stack-advisor"
+    },
+    "recommendation": {
+      "type": "object",
+      "required": ["primary", "rationale"],
+      "properties": {
+        "primary": {
+          "type": "object",
+          "required": ["name"],
+          "properties": {
+            "name": { "type": "string" },
+            "description": { "type": "string" }
+          }
+        },
+        "rationale": { "type": "string" }
+      }
+    },
+    "stack": {
+      "type": "object",
+      "properties": {
+        "frontend": {
+          "type": "object",
+          "properties": {
+            "framework": { "type": "string" },
+            "language": { "type": "string" },
+            "styling": { "type": "string" },
+            "rationale": { "type": "string" }
+          }
+        },
+        "backend": {
+          "type": "object",
+          "properties": {
+            "framework": { "type": "string" },
+            "language": { "type": "string" },
+            "rationale": { "type": "string" }
+          }
+        },
+        "database": {
+          "type": "object",
+          "properties": {
+            "type": { "type": "string" },
+            "product": { "type": "string" },
+            "rationale": { "type": "string" }
+          }
+        },
+        "auth": {
+          "type": "object",
+          "properties": {
+            "approach": { "type": "string" },
+            "provider": { "type": "string" },
+            "rationale": { "type": "string" }
+          }
+        },
+        "storage": {
+          "type": "object",
+          "properties": {
+            "type": { "type": "string" },
+            "provider": { "type": "string" },
+            "rationale": { "type": "string" }
+          }
+        },
+        "testing": {
+          "type": "object",
+          "properties": {
+            "framework": { "type": "string" },
+            "approach": { "type": "string" }
+          }
+        }
+      }
+    },
+    "spectrum_analysis": {
+      "type": "object",
+      "description": "Enterprise vs Hacker spectrum positioning",
+      "properties": {
+        "position": {
+          "type": "string",
+          "enum": ["enterprise", "balanced", "hacker"]
+        },
+        "rationale": { "type": "string" }
+      }
+    },
+    "learning_opportunities": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "cost_analysis": {
+      "type": "object",
+      "properties": {
+        "development": { "type": "string" },
+        "infrastructure": { "type": "string" },
+        "ongoing": { "type": "string" }
+      }
+    },
+    "alternatives": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "rationale"],
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "rationale": { "type": "string" },
+          "trade_offs": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    },
+    "ruled_out": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "reason"],
+        "properties": {
+          "name": { "type": "string" },
+          "reason": { "type": "string" }
+        }
+      }
+    },
+    "user_constraints_acknowledged": {
+      "type": "object",
+      "description": "User-stated preferences from brief, documented but not binding",
+      "properties": {
+        "from_brief": { "type": ["string", "null"] },
+        "incorporated": { "type": "boolean" },
+        "notes": { "type": "string" }
+      }
+    }
+  }
+}

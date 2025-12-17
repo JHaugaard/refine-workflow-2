@@ -1,0 +1,9 @@
+# This directory stores workflow handoff documents
+# Files created here:
+#   - PROJECT-MODE.md (workflow mode declaration)
+#   - brief.json (project brief)
+#   - architecture-context.json (optional, from solution-architect)
+#   - tech-stack-decision.json (technology stack)
+#   - deployment-strategy.json (hosting strategy)
+#   - test-strategy.md (optional, from test-orchestrator)
+#   - deployment-log.json (from deploy-guide)

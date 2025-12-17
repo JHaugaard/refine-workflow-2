@@ -1,0 +1,101 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "deployment-log.schema.json",
+  "title": "Deployment Log",
+  "description": "Deployment record produced by deploy-guide skill",
+  "type": "object",
+  "required": ["document_type", "project", "created_by", "deployments"],
+  "properties": {
+    "document_type": {
+      "type": "string",
+      "const": "deployment-log"
+    },
+    "project": {
+      "type": "string",
+      "minLength": 1
+    },
+    "created_by": {
+      "type": "string",
+      "const": "deploy-guide"
+    },
+    "deployment_target": {
+      "type": "string",
+      "description": "Where the application is deployed"
+    },
+    "deployments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["date", "status"],
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "commit": { "type": "string" },
+          "status": {
+            "type": "string",
+            "enum": ["success", "failed", "rolled-back"]
+          },
+          "notes": { "type": "string" }
+        }
+      }
+    },
+    "runbook": {
+      "type": "object",
+      "description": "Deployment runbook for future deployments",
+      "properties": {
+        "pre_deployment": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "deployment_steps": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "post_deployment": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "rollback_procedure": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "environment": {
+      "type": "object",
+      "properties": {
+        "url": { "type": "string" },
+        "admin_url": { "type": ["string", "null"] },
+        "health_check": { "type": ["string", "null"] }
+      }
+    },
+    "secrets_reference": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "location": { "type": "string" },
+          "notes": { "type": "string" }
+        }
+      },
+      "description": "References to secrets (NOT actual values)"
+    },
+    "troubleshooting": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "issue": { "type": "string" },
+          "solution": { "type": "string" }
+        }
+      }
+    },
+    "lessons_learned": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}

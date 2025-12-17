@@ -1,6 +1,13 @@
 ---
 name: deployment-advisor
 description: "Recommend hosting strategy based on chosen tech stack and project needs. Provides deployment workflow, cost breakdown, and scaling path."
+version: 1.5.0
+author: john
+tags:
+  - workflow
+  - planning
+  - deployment
+  - advisory
 allowed-tools:
   - Read
   - Grep
@@ -390,9 +397,6 @@ Add to decisions array:
     }
   ],
 
-  "termination_point": "project-spinup | deploy-guide | ci-cd-implement",
-
-  "handoff_to": ["project-spinup", "deploy-guide", "ci-cd-implement"]
 }
 </json-schema>
 
@@ -480,53 +484,13 @@ Contents:
 
 ---
 
-<workflow-status>
-Phase 3 of 8: Deployment Strategy
+<outputs>
+**.docs/deployment-strategy.json** — Structured deployment recommendation with:
+- Hosting choice with rationale
+- Deployment workflow (initial setup, regular deploy, rollback)
+- Cost breakdown and scaling path
+- Storage strategy
+- Alternatives considered with trade-offs
 
-Status:
-  Phase 0: Project Brief (project-brief-writer)
-  Phase 1: Architecture Context (solution-architect) [recommended]
-  Phase 2: Tech Stack (tech-stack-advisor)
-  Phase 3: Deployment Strategy (you are here)
-  Phase 4: Project Foundation (project-spinup) <- TERMINATION POINT (localhost)
-  Phase 5: Test Strategy (test-orchestrator) - optional
-  Phase 6: Deployment (deploy-guide) <- TERMINATION POINT (manual deploy)
-  Phase 7: CI/CD (ci-cd-implement) <- TERMINATION POINT (full automation)
-</workflow-status>
-
----
-
-<integration-notes>
-
-<workflow-position>
-Phase 3 of 8 in the Skills workflow chain.
-Expected input:
-- .docs/architecture-context.json (scale, constraints) [optional]
-- .docs/tech-stack-decision.json (tech stack decisions)
-
-If architecture-context.json exists, scale and constraint decisions are already resolved.
-
-Produces: .docs/deployment-strategy.json for project-spinup, deploy-guide, ci-cd-implement
-</workflow-position>
-
-<flexible-entry>
-This skill can be invoked standalone without prior phases. Missing context is gathered through conversation rather than blocking.
-</flexible-entry>
-
-<termination-points>
-- Localhost deployment: Workflow terminates after project-spinup (Phase 3)
-- Native platforms (ios, macos, tauri): Workflow terminates after project-spinup (Phase 3)
-- Public deployment: Continues to deploy-guide (Phase 5) and optionally ci-cd-implement (Phase 6)
-</termination-points>
-
-<status-utility>
-Users can invoke the **workflow-status** skill at any time to:
-- See current workflow progress
-- Check which phases are complete
-- Get guidance on next steps
-- Review all handoff documents
-
-Mention this option when users seem uncertain about their progress.
-</status-utility>
-
-</integration-notes>
+**Flexible Entry:** This skill gathers missing context conversationally. If tech-stack-decision.json exists, those decisions inform hosting compatibility.
+</outputs>

@@ -4,14 +4,15 @@
 
 Generate complete project foundations with personalized CLAUDE.md, Docker setup, and project structure. Supports Guided Setup (step-by-step learning) or Quick Start (full scaffolding).
 
-**Use when:** After tech-stack-advisor and deployment-advisor have completed, to initialize new projects with your workflow, infrastructure, and best practices.
+**Use when:** After completing planning phases, to initialize new projects with your workflow, infrastructure, and best practices.
 
 **Output:** Complete project foundation including CLAUDE.md, docker-compose.yml, directory structure, configuration files, and either guided learning prompts or full scaffolding.
 
 ---
 
-## What's New (v2.0)
+## What's New (v2.1)
 
+- **Manifest-Based Architecture**: Workflow routing now handled by external manifest
 - **Environment Registry Integration**: Loads infrastructure context from `~/.claude/environment.json`
 - **JSON Handoffs**: Reads upstream JSON handoffs and produces structured `project-foundation.json`
 - **Approval Gate**: Confirms generation plan before creating files
@@ -24,36 +25,21 @@ Generate complete project foundations with personalized CLAUDE.md, Docker setup,
 When invoked, this skill will:
 
 1. **Phase 0 - Load Environment**: Read `~/.claude/environment.json` for infrastructure context (services, endpoints, established choices)
-2. **Phase 1 - Load Handoffs**: Parse JSON handoffs from upstream skills (brief.json, tech-stack-decision.json, deployment-strategy.json)
+2. **Phase 1 - Load Handoffs**: Parse JSON handoffs from `.docs/` (brief.json, tech-stack-decision.json, deployment-strategy.json)
 3. **Phase 2 - Spinup Approach**: Ask about Guided Setup vs Quick Start preference
 4. **Phase 3 - Approval Gate**: Present generation plan for user confirmation before creating files
 5. **Phase 4 - Generate Files**: Create CLAUDE.md, Docker config, directory structure
 6. **Phase 5 - Apply Approach**: Add guided prompts or full scaffolding
 7. **Phase 6 - Create Handoff**: Save `.docs/project-foundation.json`
-8. **Phase 7 - Summary**: Provide next steps and workflow status
+8. **Phase 7 - Summary**: Provide next steps
 
 ---
 
-## Skills Workflow Integration
+## Standalone Capability
 
-This skill is **Phase 3 of 6** in the Skills workflow:
+This skill can be invoked independently on any project. If upstream handoff documents are missing, the skill gathers equivalent information conversationally.
 
-```
-project-brief-writer (Phase 0) -> produces brief.json
-    |
-tech-stack-advisor (Phase 1) -> produces tech-stack-decision.json
-    |
-deployment-advisor (Phase 2) -> produces deployment-strategy.json
-    |
-project-spinup (Phase 3) <- YOU ARE HERE -> produces project-foundation.json
-    |                       <- TERMINATION POINT (localhost)
-    |
-test-orchestrator (Phase 4) - optional
-    |
-deploy-guide (Phase 5) <- TERMINATION POINT (manual deploy)
-    |
-ci-cd-implement (Phase 6) <- TERMINATION POINT (full automation)
-```
+If using the workflow system, invoke `workflow-status` to see recommended next steps.
 
 ---
 
@@ -140,7 +126,7 @@ This skill operates as an **EXECUTOR**, not an advisor:
 
 **WILL:**
 
-- Implement LOCKED decisions from upstream handoffs
+- Implement decisions from upstream handoffs
 - Use environment registry for infrastructure context
 - Ask user before proceeding differently from upstream decisions
 
@@ -157,15 +143,13 @@ See [EXAMPLES.md](EXAMPLES.md) for detailed templates:
 
 ---
 
-## Related Skills
+## Output Files
 
-- **project-brief-writer** - Creates brief.json (Phase 0)
-- **tech-stack-advisor** - Creates tech-stack-decision.json (Phase 1)
-- **deployment-advisor** - Creates deployment-strategy.json (Phase 2)
-- **test-orchestrator** - Sets up testing infrastructure (Phase 4)
-- **deploy-guide** - Executes deployment (Phase 5)
-- **ci-cd-implement** - Creates CI/CD pipelines (Phase 6)
-- **workflow-status** - Displays workflow progress
+| File | Purpose |
+|------|---------|
+| `CLAUDE.md` | Complete project context for Claude Code sessions |
+| `docker-compose.yml` | Local development environment |
+| `.docs/project-foundation.json` | Structured handoff for downstream skills |
 
 ---
 
@@ -179,13 +163,20 @@ See [EXAMPLES.md](EXAMPLES.md) for detailed templates:
 
 ## Version History
 
+### v2.1 (2025-12-16)
+
+**Manifest-Based Refactor**
+
+- Removed embedded workflow orchestration
+- Skills now focus purely on their domain
+- Workflow routing handled by manifest
+
 ### v2.0 (2025-12-10)
 
 - Added Phase 0 environment registry loading
 - Implemented JSON handoff input/output
 - Added Approval Gate (Planning Mindset)
 - Added hard-boundaries block
-- Updated workflow status to Phase 3 of 6
 - Externalized templates to EXAMPLES.md and QUICK_REFERENCE.md
 
 ### v1.3 (2025-11-17)
@@ -210,5 +201,5 @@ See [EXAMPLES.md](EXAMPLES.md) for detailed templates:
 
 ---
 
-**Version:** 2.0
-**Last Updated:** 2025-12-10
+**Version:** 2.1
+**Last Updated:** 2025-12-16

@@ -4,11 +4,11 @@
 
 Analyze project requirements and recommend appropriate technology stacks with detailed rationale. Provides primary recommendation, alternatives, and ruled-out options with explanations.
 
-**Use when:** After brainstorming project goals and features, before invoking project-spinup skill, when comparing multiple tech stack options, or when unsure which framework/language fits best.
+**Use when:** After creating a project brief, when comparing multiple tech stack options, or when unsure which framework/language fits best.
 
 **Don't use when:** For trivial projects, when tech stack is mandated, for quick prototypes where stack doesn't matter, or when you've already decided and just need validation.
 
-**Output:** tech-stack-decision.md file containing complete analysis with primary recommendation, alternatives, ruled-out options, learning opportunities, and cost analysis.
+**Output:** `.docs/tech-stack-decision.json` — structured analysis with primary recommendation, alternatives, ruled-out options, learning opportunities, and cost analysis.
 
 ---
 
@@ -16,46 +16,42 @@ Analyze project requirements and recommend appropriate technology stacks with de
 
 When invoked, this skill will:
 
-1. **Check PROJECT-MODE.md** - Determine checkpoint strictness level
+1. **Check for context** - Look for `.docs/brief.json` and `.docs/PROJECT-MODE.md`
 2. **Gather project information** - Requirements, features, complexity, timeline
 3. **Check brief quality** - Detect over-specification that bypasses learning
 4. **Consider user context** - Experience and learning goals (deployment-neutral)
 5. **Evaluate backend tools** - Supabase vs PocketBase decision framework
 6. **Analyze Enterprise vs Hacker spectrum** - Surface philosophy trade-offs
 7. **Generate recommendations** - Primary, alternatives, ruled-out options with spectrum labels
-8. **Create handoff document** - tech-stack-decision.md for deployment-advisor
+8. **Create handoff document** - `.docs/tech-stack-decision.json`
 9. **Run checkpoint** - Validate understanding based on MODE
 
 ---
 
-## Skills Workflow Integration
+## Standalone Capability
 
-This skill is **Phase 1 of 3** in the learning-focused project workflow:
+This skill can be invoked independently on any project. If `.docs/brief.json` is not available, the skill gathers equivalent information conversationally.
 
-```
-project-brief-writer (Phase 0)
-    ↓
-tech-stack-advisor ← YOU ARE HERE
-    ↓
-deployment-advisor (Phase 2)
-    ↓
-project-spinup (Phase 3)
-```
+If using the workflow system, invoke `workflow-status` to see recommended next steps.
 
 ---
 
 ## Checkpoint System
 
 ### LEARNING Mode
+
 After recommendations, answer 3 focused comprehension questions:
+
 1. Why does the primary recommendation fit this project's core need?
 2. What is the single most important trade-off if you chose Alternative 1 instead?
 3. What is the biggest new responsibility or learning challenge this stack introduces?
 
 ### BALANCED Mode
+
 Simple self-assessment checklist - confirm to proceed.
 
 ### DELIVERY Mode
+
 Quick acknowledgment: "Ready to proceed? [Yes/No]"
 
 ---
@@ -89,9 +85,11 @@ This is a philosophy choice, not a quality judgment. The skill surfaces this ten
 ## Backend Tool Selection
 
 ### Supabase (Preferred Default)
+
 Recommend when: Advanced PostgreSQL features, auth + database + storage + realtime all needed, vector embeddings (pgvector), complex queries, future scaling anticipated.
 
 ### PocketBase (Lightweight Alternative)
+
 Recommend when: Authentication is primary need, simple CRUD sufficient, embedded SQLite appropriate, single-binary simplicity valued, small scope.
 
 ---
@@ -121,6 +119,7 @@ Score each option 1-5 on:
 ## Advisory Mode
 
 This is a CONSULTANT role, not a BUILDER role:
+
 - Will NOT write production code
 - Will NOT generate project scaffolding
 - Will NOT create implementation files
@@ -128,41 +127,54 @@ This is a CONSULTANT role, not a BUILDER role:
 
 ---
 
-## Related Skills
+## Output Files
 
-- **project-brief-writer** - Creates PROJECT-MODE.md that determines checkpoint strictness (prerequisite)
-- **deployment-advisor** - Continues advisory workflow with hosting recommendations (next step)
-- **project-spinup** - Scaffolds project foundation based on tech stack decisions (final step)
+| File | Purpose |
+|------|---------|
+| `.docs/tech-stack-decision.json` | Structured tech stack recommendation with rationale, alternatives, and ruled-out options |
 
 ---
 
 ## Version History
 
+### v1.5 (2025-12-16)
+
+**Manifest-Based Refactor**
+
+- Removed embedded workflow orchestration
+- Skills now focus purely on their domain
+- Workflow routing handled by manifest
+
 ### v1.4 (2025-11-30)
-- **Deployment Neutrality:** Strengthened guardrails to keep tech stack recommendations free from hosting/infrastructure bias
-- **Enterprise vs Hacker Framework:** Added spectrum analysis to surface philosophy trade-offs in recommendations
-- **User-Stated Constraints:** Added handoff section to capture explicit user deployment preferences without biasing recommendations
+
+- Deployment Neutrality: Strengthened guardrails to keep tech stack recommendations free from hosting/infrastructure bias
+- Enterprise vs Hacker Framework: Added spectrum analysis to surface philosophy trade-offs in recommendations
+- User-Stated Constraints: Added handoff section to capture explicit user deployment preferences without biasing recommendations
 - Removed infrastructure-related scoring criteria and output fields
 - Updated output template with Enterprise vs Hacker analysis table
 
 ### v1.3 (2025-01-17)
+
 - Reduced LEARNING mode checkpoint questions from 5 to 3
 - 40% reduction in checkpoint burden while preserving pedagogical value
 
 ### v1.2 (2025-11-17)
+
 - Updated infrastructure list with VPS8 specs, Caddy, PocketBase
 - Added Backend Tool Selection Framework (Supabase vs PocketBase)
 - Added Ancillary Infrastructure Tools section (n8n, Ollama, Wiki.js)
 
 ### v1.1 (2025-11-11)
+
 - Added 3-level checkpoint system
 - Added brief quality detection
 - Integrated self-hosted infrastructure evaluation framework
 
 ### v1.0 (2025-11-04)
+
 Initial release with tech stack recommendation framework.
 
 ---
 
-**Version:** 1.4
-**Last Updated:** 2025-11-30
+**Version:** 1.5
+**Last Updated:** 2025-12-16

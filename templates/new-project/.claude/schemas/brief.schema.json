@@ -1,0 +1,155 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "brief.schema.json",
+  "title": "Project Brief",
+  "description": "Technology-neutral project brief produced by project-brief-writer skill",
+  "type": "object",
+  "required": ["document_type", "version", "created", "project", "mode", "problem", "goals", "deployment_intent"],
+  "properties": {
+    "document_type": {
+      "type": "string",
+      "const": "brief"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+$"
+    },
+    "created": {
+      "type": "string",
+      "format": "date"
+    },
+    "project": {
+      "type": "string",
+      "minLength": 1
+    },
+    "mode": {
+      "type": "string",
+      "enum": ["LEARNING", "DELIVERY", "BALANCED"]
+    },
+    "rationale": {
+      "type": "string",
+      "description": "1-3 sentence human-readable summary"
+    },
+    "problem": {
+      "type": "object",
+      "required": ["statement"],
+      "properties": {
+        "statement": {
+          "type": "string",
+          "minLength": 10
+        },
+        "impact": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "goals": {
+      "type": "object",
+      "required": ["primary"],
+      "properties": {
+        "primary": {
+          "type": "string",
+          "minLength": 5
+        },
+        "secondary": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "features": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "description", "priority"],
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "priority": {
+            "type": "string",
+            "enum": ["must-have", "nice-to-have"]
+          }
+        }
+      }
+    },
+    "success_criteria": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["metric", "measurement"],
+        "properties": {
+          "metric": { "type": "string" },
+          "measurement": { "type": "string" }
+        }
+      }
+    },
+    "use_cases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "scenario"],
+        "properties": {
+          "name": { "type": "string" },
+          "scenario": { "type": "string" },
+          "expected_behavior": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    },
+    "edge_cases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "category": { "type": "string" },
+          "problem": { "type": "string" },
+          "solution": { "type": "string" }
+        }
+      }
+    },
+    "constraints": {
+      "type": "object",
+      "properties": {
+        "timeline": { "type": ["string", "null"] },
+        "budget": { "type": ["string", "null"] },
+        "infrastructure": { "type": ["string", "null"] }
+      }
+    },
+    "assumptions": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "out_of_scope": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "deployment_intent": {
+      "type": "string",
+      "enum": ["localhost", "public", "tbd"]
+    },
+    "learning_goals": {
+      "type": "object",
+      "properties": {
+        "topics": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "skills": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "user_stated_preferences": {
+      "type": "object",
+      "properties": {
+        "disclaimer": { "type": "string" },
+        "technology": { "type": ["string", "null"] },
+        "platform": { "type": ["string", "null"] }
+      }
+    }
+  }
+}

@@ -7,6 +7,7 @@ Set up testing infrastructure and strategy for a project. This skill analyzes yo
 **Use when:** Your project has initial code and you're ready to add testing infrastructure.
 
 **Output:**
+
 - Test framework configuration files
 - Initial test scaffolding (example tests)
 - `.docs/test-strategy.md` (testing approach documentation)
@@ -27,6 +28,14 @@ When invoked, this skill will:
 
 ---
 
+## Standalone Capability
+
+This skill can be invoked independently on any project. It analyzes the project structure to recommend appropriate testing tools — no prior workflow context required.
+
+If using the workflow system, invoke `workflow-status` to see recommended next steps.
+
+---
+
 ## Supported Tech Stacks
 
 | Stack | Test Framework | Test Types |
@@ -38,31 +47,28 @@ When invoked, this skill will:
 
 ---
 
-## Workflow Position
+## Output Files
 
-This is **Phase 4** in the Skills workflow - an optional phase that can be invoked when your project is ready for testing infrastructure.
-
-```
-Phase 0: project-brief-writer
-Phase 1: tech-stack-advisor
-Phase 2: deployment-advisor
-Phase 3: project-spinup         <- TERMINATION POINT (localhost)
-Phase 4: test-orchestrator      <- YOU ARE HERE (optional)
-Phase 5: deploy-guide           <- TERMINATION POINT (manual deploy)
-Phase 6: ci-cd-implement        <- TERMINATION POINT (full automation)
-```
-
----
-
-## Flexible Entry
-
-This skill can be invoked standalone on any project. It analyzes the project structure to recommend appropriate testing tools - no prior workflow phases required.
+| File | Purpose |
+|------|---------|
+| `.docs/test-strategy.md` | Testing approach documentation and guidance |
+| Config files | Framework-specific configuration (vitest.config.ts, pytest.ini, etc.) |
+| Example tests | Scaffolding to get started |
 
 ---
 
 ## Version History
 
+### v1.1 (2025-12-16)
+
+**Manifest-Based Refactor**
+
+- Removed embedded workflow orchestration
+- Skills now focus purely on their domain
+- Workflow routing handled by manifest
+
 ### v1.0 (2025-11-22)
+
 **Initial Release**
 
 - Test framework configuration for multiple tech stacks
@@ -73,5 +79,5 @@ This skill can be invoked standalone on any project. It analyzes the project str
 
 ---
 
-**Version:** 1.0
-**Last Updated:** 2025-11-22
+**Version:** 1.1
+**Last Updated:** 2025-12-16

@@ -1,0 +1,143 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "deployment-strategy.schema.json",
+  "title": "Deployment Strategy",
+  "description": "Hosting and deployment strategy produced by deployment-advisor skill",
+  "type": "object",
+  "required": ["document_type", "project", "mode", "created_by", "hosting"],
+  "properties": {
+    "document_type": {
+      "type": "string",
+      "const": "deployment-strategy"
+    },
+    "project": {
+      "type": "string",
+      "minLength": 1
+    },
+    "mode": {
+      "type": "string",
+      "enum": ["LEARNING", "DELIVERY", "BALANCED"]
+    },
+    "created_by": {
+      "type": "string",
+      "const": "deployment-advisor"
+    },
+    "hosting": {
+      "type": "object",
+      "required": ["type", "rationale"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["localhost", "vps-docker", "cloudflare-pages", "fly-io", "hostinger-shared"],
+          "description": "Primary hosting target - used by decision gates"
+        },
+        "provider": { "type": "string" },
+        "rationale": { "type": "string" },
+        "server_type": { "type": ["string", "null"] },
+        "container_approach": { "type": ["string", "null"] },
+        "database": {
+          "type": "object",
+          "properties": {
+            "type": { "type": "string" },
+            "location": { "type": "string" }
+          }
+        },
+        "storage": {
+          "type": "object",
+          "properties": {
+            "type": { "type": "string" },
+            "provider": { "type": ["string", "null"] }
+          }
+        },
+        "cdn": { "type": ["string", "null"] },
+        "ssl": { "type": "string" }
+      }
+    },
+    "deployment_workflow": {
+      "type": "object",
+      "properties": {
+        "initial_setup": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "regular_deployment": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "rollback": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "development_environment": {
+      "type": "object",
+      "properties": {
+        "local_setup": { "type": "string" },
+        "docker_compose": { "type": "boolean" },
+        "hot_reload": { "type": "boolean" }
+      }
+    },
+    "cost_breakdown": {
+      "type": "object",
+      "properties": {
+        "hosting": { "type": "string" },
+        "database": { "type": "string" },
+        "storage": { "type": "string" },
+        "bandwidth": { "type": "string" },
+        "total_monthly": { "type": "string" }
+      }
+    },
+    "scaling_path": {
+      "type": "object",
+      "properties": {
+        "current_capacity": { "type": "string" },
+        "next_step": { "type": "string" },
+        "trigger": { "type": "string" }
+      }
+    },
+    "alternatives": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "rationale"],
+        "properties": {
+          "name": { "type": "string" },
+          "rationale": { "type": "string" },
+          "trade_offs": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    },
+    "monitoring": {
+      "type": "object",
+      "properties": {
+        "uptime": { "type": "string" },
+        "logs": { "type": "string" },
+        "alerts": { "type": "string" }
+      }
+    },
+    "backup_strategy": {
+      "type": "object",
+      "properties": {
+        "database": { "type": "string" },
+        "files": { "type": "string" },
+        "frequency": { "type": "string" }
+      }
+    },
+    "security": {
+      "type": "object",
+      "properties": {
+        "firewall": { "type": "string" },
+        "updates": { "type": "string" },
+        "secrets_management": { "type": "string" }
+      }
+    },
+    "native_platform_handoff": {
+      "type": "boolean",
+      "description": "True if this is a native platform (iOS/macOS/Tauri) that doesn't need hosting"
+    }
+  }
+}

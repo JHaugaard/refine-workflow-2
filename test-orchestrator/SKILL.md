@@ -1,6 +1,13 @@
 ---
 name: test-orchestrator
 description: "Set up testing infrastructure and strategy for a project. This skill should be used when a project is ready for testing setup, including test framework configuration, initial test scaffolding, and documentation of testing approach. Primarily a setup skill with guidance for ongoing testing."
+version: 1.1.0
+author: john
+tags:
+  - workflow
+  - quality
+  - testing
+  - executor
 allowed-tools:
   - Read
   - Grep
@@ -1169,70 +1176,17 @@ When ready to deploy, use the **deploy-guide** skill.
 
 ---
 
-<workflow-status>
-Phase 4 of 6: Test Strategy (Optional)
+<outputs>
+**.docs/test-strategy.md** — Testing strategy documentation with:
+- Testing philosophy and approach
+- Test types implemented (unit, integration, e2e)
+- Test file organization and commands
+- Coverage goals and CI integration notes
 
-Skills Workflow Status:
-  Phase 0: Project Brief (project-brief-writer) → brief.json
-  Phase 1: Tech Stack (tech-stack-advisor) → tech-stack-decision.json
-  Phase 2: Deployment Strategy (deployment-advisor) → deployment-strategy.json
-  Phase 3: Project Foundation (project-spinup) → project-foundation.json ← TERMINATION POINT (localhost)
-  Phase 4: Test Strategy (you are here) → test-strategy.md (optional)
-  Phase 5: Deployment (deploy-guide) → deployment-log.json ← TERMINATION POINT (manual deploy)
-  Phase 6: CI/CD (ci-cd-implement) ← TERMINATION POINT (full automation)
+**Additional outputs:**
+- Test framework configuration files (vitest.config.ts, jest.config.js, pytest.ini, etc.)
+- Test scaffolding (example tests, setup files)
+- Package scripts for running tests
 
-Internal Phases (this skill):
-  Phase 0: Load environment context
-  Phase 1: Load JSON handoff documents
-  Phase 2: Analyze project structure
-  Phase 3: Determine testing approach
-  Phase 4: Configure testing framework
-  Phase 5: Create test scaffolding
-  Phase 6: Create strategy documentation
-  Phase 7: Provide guidance and summary
-</workflow-status>
-
----
-
-<integration-notes>
-
-<workflow-position>
-Phase 4 of 6 in the Skills workflow chain.
-This is an OPTIONAL phase - can be skipped or invoked anytime.
-Expected input: Project with code structure (after development begins)
-Produces: Test infrastructure, .docs/test-strategy.md
-</workflow-position>
-
-<consumes-handoffs>
-Reads from upstream JSON handoffs (if they exist):
-- .docs/tech-stack-decision.json: Testing framework recommendations, tech stack details
-- .docs/deployment-strategy.json: Storage strategy (Local VPS, Backblaze B2, Tigris) for storage test scaffolding
-- .docs/project-foundation.json: Project structure and configuration details
-</consumes-handoffs>
-
-<environment-registry>
-Reads from ~/.claude/environment.json (if exists):
-- established_choices.containerization: Docker is the locked choice (affects test configuration)
-</environment-registry>
-
-<when-to-invoke>
-- When project has initial code and is ready for testing infrastructure
-- When user wants to add tests to an existing project
-- Before deploy-guide if automated testing is desired
-</when-to-invoke>
-
-<flexible-entry>
-This skill can be invoked standalone on any project. It analyzes the project structure to recommend appropriate testing tools. Missing handoff documents are not blockers - information is gathered through project analysis.
-</flexible-entry>
-
-<status-utility>
-Users can invoke the **workflow-status** skill at any time to:
-- See current workflow progress
-- Check which phases are complete
-- Get guidance on next steps
-- Review all JSON handoff documents
-
-Mention this option when users seem uncertain about their progress.
-</status-utility>
-
-</integration-notes>
+**Flexible Entry:** This skill analyzes project structure to recommend appropriate testing tools. Upstream handoffs inform but don't block — missing context is gathered through project analysis.
+</outputs>

@@ -1,6 +1,19 @@
 ---
 name: project-spinup
 description: "Generate complete project foundations with personalized CLAUDE.md, Docker setup, and project structure. Supports Guided Setup or Quick Start."
+version: 2.1.0
+author: john
+tags:
+  - workflow
+  - implementation
+  - scaffolding
+  - executor
+allowed-tools:
+  - Read
+  - Grep
+  - Glob
+  - Write
+  - Bash
 ---
 
 # project-spinup
@@ -502,18 +515,10 @@ See EXAMPLES.md for quick start structure examples.
     "endpoints_configured": ["[endpoint1]", "[endpoint2]"]
   },
 
-  "workflow_status": {
-    "completed_phases": ["project-brief-writer", "tech-stack-advisor", "deployment-advisor", "project-spinup"],
-    "is_termination_point": "[true if localhost deployment]",
-    "next_phases": ["test-orchestrator", "deploy-guide", "ci-cd-implement"]
-  },
-
   "next_actions": [
     "[Action 1 based on spinup approach]",
     "[Action 2]"
-  ],
-
-  "handoff_to": ["test-orchestrator", "deploy-guide"]
+  ]
 }
 </json-schema>
 
@@ -533,32 +538,13 @@ See EXAMPLES.md for quick start structure examples.
 
 ---
 
-### Workflow Status
+### Files Created
 
-**PLANNING PHASES - COMPLETE**
-- Phase 0: project-brief-writer
-- Phase 1: tech-stack-advisor
-- Phase 2: deployment-advisor
-
-**SETUP PHASE - COMPLETE**
-- Phase 3: project-spinup (this skill)
-
-[If Localhost:]
-**WORKFLOW TERMINATION POINT**
-
-Your localhost project is ready for development. No further workflow phases needed.
-
-If you later decide to deploy publicly:
-1. Re-run deployment-advisor to choose a hosting target
-2. Continue with deploy-guide and optionally ci-cd-implement
-
-[If Public Deployment:]
-**DEVELOPMENT PHASE - START**
-
-Build your features! When you're ready:
-- Phase 4: test-orchestrator (optional - set up testing infrastructure)
-- Phase 5: deploy-guide (deploy your application)
-- Phase 6: ci-cd-implement (optional - automate deployments)
+- CLAUDE.md — Project context for AI assistant
+- docker-compose.yml — Local development environment
+- .env.example — Environment variable template
+- README.md — Setup instructions
+- .docs/project-foundation.json — Structured handoff
 
 ---
 
@@ -589,6 +575,12 @@ Open http://localhost:{port} to see your application.
 1. Review generated code structure
 2. Copy .env.example to .env.local and configure
 3. Start building features!
+
+{If Localhost:}
+Your localhost project is ready for development.
+
+{If Public Deployment:}
+When ready: invoke `workflow-status` to see next steps for testing and deployment.
 </summary-template>
 </phase>
 
@@ -693,56 +685,18 @@ Each template includes:
 
 ---
 
-<workflow-status>
-Phase 3 of 6: Project Foundation
+<outputs>
+**.docs/project-foundation.json** — Structured project foundation handoff with:
+- Tech stack summary (from upstream decisions)
+- Deployment target and approach
+- Generated files list
+- Spinup approach (guided/quick-start)
+- Environment integration details
 
-Upstream:
-  Phase 0: Project Brief (project-brief-writer) - produces brief.json
-  Phase 1: Tech Stack (tech-stack-advisor) - produces tech-stack-decision.json
-  Phase 2: Deployment Strategy (deployment-advisor) - produces deployment-strategy.json
+**Additional outputs:**
+- CLAUDE.md — Comprehensive project context for AI assistant
+- docker-compose.yml — Local development environment
+- Directory structure, README.md, .env.example, .gitignore
 
-Current:
-  Phase 3: Project Foundation (you are here) <- TERMINATION POINT (localhost OR native platforms)
-
-Downstream:
-  Phase 4: Test Strategy (test-orchestrator) - optional
-  Phase 5: Deployment (deploy-guide) <- TERMINATION POINT (manual deploy)
-  Phase 6: CI/CD (ci-cd-implement) <- TERMINATION POINT (full automation)
-
-Note: Native platforms (ios, macos, tauri) terminate here. Device installation is handled
-via Xcode/Tauri build, not deploy-guide. deploy-guide may later add native device walkthrough.
-</workflow-status>
-
----
-
-<integration-notes>
-
-<workflow-position>
-Phase 3 of 6 in the Skills workflow chain.
-Expected input: .docs/brief.json, .docs/tech-stack-decision.json, .docs/deployment-strategy.json
-Produces: Project foundation + .docs/project-foundation.json
-
-This is a TERMINATION POINT for localhost/learning projects.
-</workflow-position>
-
-<flexible-entry>
-This skill can be invoked standalone without prior phases. Missing context is gathered through conversation rather than blocking.
-</flexible-entry>
-
-<termination-points>
-- If deployment target is localhost: Workflow terminates here
-- If deployment target is native platform (ios, macos, tauri): Workflow terminates here
-- If deployment target is public web: Workflow continues to deploy-guide (Phase 5)
-</termination-points>
-
-<status-utility>
-Users can invoke the **workflow-status** skill at any time to:
-- See current workflow progress
-- Check which phases are complete
-- Get guidance on next steps
-- Review all handoff documents
-
-Mention this option when users seem uncertain about their progress.
-</status-utility>
-
-</integration-notes>
+**Flexible Entry:** This skill gathers missing context conversationally. Upstream handoffs (brief.json, tech-stack-decision.json, deployment-strategy.json) inform but don't block execution.
+</outputs>
