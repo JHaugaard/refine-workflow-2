@@ -87,36 +87,37 @@ paths:
 ---
 # MCP Server Workflow
 
+## Available Servers (Quick Reference)
+| Server | Purpose | Tools |
+|--------|---------|-------|
+| context7 | Up-to-date library documentation | 3 |
+| zen | Code analysis, debugging, review | 18 |
+| github | PR/issue management | 12 |
+| postgres | Database queries | 8 |
+| filesystem | File operations | 6 |
+
+Use `mcp-find [query]` to discover additional servers.
+
 ## Commands
 | Command | Purpose |
 |---------|---------|
 | `docker mcp server enable [name]` | Add server and tools |
-| `docker mcp server disable [name]` | Remove server and tools |
+| `docker mcp server disable [name]` | Remove server |
 | `docker mcp server reset` | Return to 6 core tools |
 | `docker mcp tools disable [tool1] ...` | Disable specific tools |
-| `docker mcp tools enable [tool1] ...` | Re-enable tools |
+| `docker mcp tools count` | Check current tool count |
 
 After enable/disable: user runs `/clear` to reload.
 
 ## Session Protocol
 
-**Start (`/session-start`):**
-1. Check tool count (should be 6)
-2. Ask which servers needed
-3. Enable via: `docker mcp server enable [name]`
-4. If many tools: "Want all, or just [subset]?"
-5. User runs /clear
+**Start:** Check tool count (should be 6) → Ask which servers → Enable → User /clear
 
-**During session:**
-- "I could add [server] for [task]. Should I?"
-- Log additions in session-context.md
+**During:** Offer servers as needed → Log in session-context.md with description
 
-**End (`/session-end`):**
-1. Disable each server
-2. Verify count returns to 6
-3. If stuck: `docker mcp server reset`
+**End:** Disable each server → Verify count returns to 6
 
-## Phrasing Examples
+## Phrasing
 - "Context7 would help with up-to-date docs. Add it?"
 - "Zen adds 18 tools. Want all, or just analyze/debug/codereview?"
 ```
